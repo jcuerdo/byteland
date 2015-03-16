@@ -1,3 +1,7 @@
+byteland_person:
+    resource: "@BytelandBundle/Resources/config/routing/person.yml"
+    prefix:   /person
+
 byteland_homepage:
-    path:     /home/{name}
+    path:     /schema
     defaults: { _controller: BytelandBundle:Default:index }

@@ -1,0 +1,27 @@
+person:
+    path:     /
+    defaults: { _controller: "BytelandBundle:Person:index" }
+    methods: [GET]
+
+person_show:
+    path:     /{id}
+    defaults: { _controller: "BytelandBundle:Person:show" }
+    requirements:
+        id:  \d+
+    methods: [GET]
+
+person_create:
+    path:     /create
+    defaults: { _controller: "BytelandBundle:Person:create" }
+    methods: [POST]
+
+
+person_update:
+    path:     /{id}/update
+    defaults: { _controller: "BytelandBundle:Person:update" }
+    methods: [PUT,POST]
+
+person_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "BytelandBundle:Person:delete" }
+    methods: [DELETE]
