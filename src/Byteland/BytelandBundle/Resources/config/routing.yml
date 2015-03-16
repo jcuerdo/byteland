@@ -1,0 +1,3 @@
+byteland_homepage:
+    path:     /home/{name}
+    defaults: { _controller: BytelandBundle:Default:index }
