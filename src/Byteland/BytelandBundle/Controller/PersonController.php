@@ -74,12 +74,12 @@ class PersonController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        parse_str($request->getContent(), $params);
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('BytelandBundle:Person')->find($id);
 
-
-        $entity->setName($request->request->get('name'));
+        $entity->setName($params['name']);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($entity);
