@@ -1,0 +1,3 @@
+byteland:
+    resource: "@BytelandBundle/Resources/config/routing.yml"
+    prefix:   /
