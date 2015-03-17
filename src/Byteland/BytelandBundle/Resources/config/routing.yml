@@ -1,3 +1,7 @@
+byteland_restaurant:
+    resource: "@BytelandBundle/Resources/config/routing/restaurant.yml"
+    prefix:   /restaurant
+
 byteland_person:
     resource: "@BytelandBundle/Resources/config/routing/person.yml"
     prefix:   /person

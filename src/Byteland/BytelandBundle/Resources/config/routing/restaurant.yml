@@ -1,0 +1,26 @@
+restaurant:
+    path:     /
+    defaults: { _controller: "BytelandBundle:Restaurant:index" }
+    methods: [GET]
+
+restaurant_show:
+    path:     /{id}
+    defaults: { _controller: "BytelandBundle:Restaurant:show" }
+    methods: [GET]
+
+
+restaurant_create:
+    path:     /create
+    defaults: { _controller: "BytelandBundle:Restaurant:create" }
+    methods: [POST]
+
+
+restaurant_update:
+    path:     /{id}
+    defaults: { _controller: "BytelandBundle:Restaurant:update" }
+    methods: [PUT]
+
+restaurant_delete:
+    path:     /{id}
+    defaults: { _controller: "BytelandBundle:Restaurant:delete" }
+    methods: [DELETE]
