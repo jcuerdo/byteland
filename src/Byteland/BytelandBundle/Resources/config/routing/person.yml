@@ -3,6 +3,11 @@ person:
     defaults: { _controller: "BytelandBundle:Person:index" }
     methods: [GET]
 
+person_create:
+    path:     /create
+    defaults: { _controller: "BytelandBundle:Person:create" }
+    methods: [POST]
+
 person_show:
     path:     /{id}
     defaults: { _controller: "BytelandBundle:Person:show" }
@@ -10,18 +15,12 @@ person_show:
         id:  \d+
     methods: [GET]
 
-person_create:
-    path:     /create
-    defaults: { _controller: "BytelandBundle:Person:create" }
-    methods: [POST]
-
-
 person_update:
-    path:     /{id}/update
+    path:     /{id}
     defaults: { _controller: "BytelandBundle:Person:update" }
-    methods: [PUT,POST]
+    methods: [PUT]
 
 person_delete:
-    path:     /{id}/delete
+    path:     /{id}
     defaults: { _controller: "BytelandBundle:Person:delete" }
     methods: [DELETE]
