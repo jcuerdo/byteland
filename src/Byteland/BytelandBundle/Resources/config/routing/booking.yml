@@ -1,0 +1,4 @@
+booking_create:
+    path:     /
+    defaults: { _controller: "BytelandBundle:Booking:create" }
+    requirements: { _method: post }

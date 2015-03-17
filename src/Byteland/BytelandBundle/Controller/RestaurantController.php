@@ -2,6 +2,8 @@
 
 namespace Byteland\BytelandBundle\Controller;
 
+
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -25,9 +27,9 @@ class RestaurantController extends Controller
 
         $entities = $em->getRepository('BytelandBundle:Restaurant')->findAll();
 
-        foreach($entities as $key => $value)
+        foreach($entities as $key => $entity)
         {
-            $entities[$key] = array('id' => $value->getId(),'name' => $value->getName());
+            $entities[$key] = array('id' => $entity->getId(),'name' => $entity->getName(),'max_accepted_people' => $entity->getMaxAcceptedPeople());
         }
         $response = new JsonResponse($entities,JsonResponse::HTTP_OK,array('Content-Type' => 'application/json'));
 
@@ -86,8 +88,16 @@ class RestaurantController extends Controller
 
         $entity = $em->getRepository('BytelandBundle:Restaurant')->find($id);
 
-        $entity->setName($params['name']);
-        $entity->setMaxAcceptedPeople($params['max_accepted_people']);
+        if(!empty($params['name']))
+        {
+            $entity->setName($params['name']);
+        }
+
+        if(!empty($params['max_accepted_people']))
+        {
+            $entity->setMaxAcceptedPeople($params['max_accepted_people']);
+        }
+
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Restaurant.');

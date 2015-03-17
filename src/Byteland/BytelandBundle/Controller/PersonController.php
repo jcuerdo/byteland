@@ -85,7 +85,10 @@ class PersonController extends Controller
 
         $entity = $em->getRepository('BytelandBundle:Person')->find($id);
 
-        $entity->setName($params['name']);
+        if(!empty($params['name']))
+        {
+            $entity->setName($params['name']);
+        }
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($entity);

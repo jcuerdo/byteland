@@ -1,0 +1,4 @@
+availability_create:
+    path:     /
+    defaults: { _controller: "BytelandBundle:Availability:create" }
+    requirements: { _method: post }

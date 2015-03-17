@@ -1,3 +1,11 @@
+byteland_booking:
+    resource: "@BytelandBundle/Resources/config/routing/booking.yml"
+    prefix:   /booking
+
+byteland_availability:
+    resource: "@BytelandBundle/Resources/config/routing/availability.yml"
+    prefix:   /availability
+
 byteland_restaurant:
     resource: "@BytelandBundle/Resources/config/routing/restaurant.yml"
     prefix:   /restaurant
