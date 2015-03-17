@@ -13,8 +13,10 @@ use Doctrine\ORM\EntityRepository;
 class BookingRepository extends EntityRepository
 {
 	/**
-	 * Find Ampa by slug
-	 * @param  string $slug Slug.
+	 * Find by date and restaurant
+	 *
+	 * @param Restaurant $restaurant
+	 * @param string $date.
 	 */
 	public function findBookingByRestaurantAndDate(Restaurant $restaurant, $date)
 	{
