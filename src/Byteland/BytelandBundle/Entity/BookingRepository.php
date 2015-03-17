@@ -12,4 +12,18 @@ use Doctrine\ORM\EntityRepository;
  */
 class BookingRepository extends EntityRepository
 {
+	/**
+	 * Find Ampa by slug
+	 * @param  string $slug Slug.
+	 */
+	public function findBookingByRestaurantAndDate(Restaurant $restaurant, $date)
+	{
+    	return $this->getEntityManager()
+    	->createQuery(
+    		'SELECT b from BytelandBundle:Booking b WHERE b.date=:date and b.restaurant_id=:restaurant'
+    		)
+    	->setParameter('date', $date)
+    	->setParameter('restaurant', $restaurant->getId())
+    	->getSingleResult();
+    }
 }

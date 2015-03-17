@@ -33,6 +33,14 @@ class BookingController extends Controller
         $entity->setDate(strtotime($request->get('date')));
         
         $restaurant = $em->getRepository('BytelandBundle:Restaurant')->find($request->get('id_restaurant'));
+
+        $bookings = $entity->findBookingByRestaurantAndDate($restaurnat,$request->get('date'));
+
+        if(count($bookings) >= $restaurnat->getMaxAcceptedPeople())) {
+            $response = new JsonResponse('RESTAURANT FULL',JsonResponse::HTTP_PRECONDITION_REQUIRED ,array('Content-Type' => 'application/json'));
+            return $response;
+        }
+
         $person = $em->getRepository('BytelandBundle:Person')->find($request->get('id_person'));
         $entity->setRestaurant($restaurant);
         $entity->setPerson($person);
