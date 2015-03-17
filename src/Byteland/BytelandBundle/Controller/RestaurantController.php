@@ -41,6 +41,11 @@ class RestaurantController extends Controller
      */
     public function createAction(Request $request)
     {
+        if(!$request->get('name') || !$request->get('max_accepted_people')) {
+            $response = new JsonResponse('ERROR',JsonResponse::HTTP_PRECONDITION_REQUIRED ,array('Content-Type' => 'application/json'));
+            return $response;
+        }
+
         $entity = new Restaurant();
 
         $entity->setName($request->get('name'));

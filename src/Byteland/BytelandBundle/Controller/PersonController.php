@@ -38,6 +38,11 @@ class PersonController extends Controller
      */
     public function createAction(Request $request)
     {
+        if(!$request->get('name')) {
+            $response = new JsonResponse('ERROR',JsonResponse::HTTP_PRECONDITION_REQUIRED ,array('Content-Type' => 'application/json'));
+            return $response;
+        }
+
         $entity = new Person();
 
         $entity->setName($request->get('name'));
@@ -81,6 +86,7 @@ class PersonController extends Controller
     public function updateAction(Request $request, $id)
     {
         parse_str($request->getContent(), $params);
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('BytelandBundle:Person')->find($id);
