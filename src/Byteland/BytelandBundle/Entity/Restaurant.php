@@ -50,6 +50,22 @@ class Restaurant
     private $availabilities;
 
     /**
+     * @return array
+     */
+    public function getAvailabilities()
+    {
+        return $this->availabilities;
+    }
+
+    /**
+     * @param array $availabilities
+     */
+    public function setAvailabilities($availabilities)
+    {
+        $this->availabilities = $availabilities;
+    }
+
+    /**
      * Constructor
      */
     public function __construct()

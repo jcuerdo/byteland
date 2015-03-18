@@ -73,9 +73,26 @@ class RestaurantController extends Controller
             throw $this->createNotFoundException('Unable to find Restaurant.');
         }
 
-        $entity = array('id' => $entity->getId(),'name' => $entity->getName(),'max_accepted_people' => $entity->getMaxAcceptedPeople());
+        $entity_data = array('id' => $entity->getId(),'name' => $entity->getName(),'max_accepted_people' => $entity->getMaxAcceptedPeople());
 
-        $response = new JsonResponse($entity,JsonResponse::HTTP_OK,array('Content-Type' => 'application/json'));
+        foreach($entity->getBookings() as $key => $value)
+        {
+            $entity_data['bookings'][$key] = array(
+                'id' => $value->getId(),
+                'date' => $value->getDate()->format('d-m-Y'),
+                'person_id' => $value->getPerson()->getId()
+            );
+        }
+
+        foreach($entity->getAvailabilities() as $key => $value)
+        {
+            $entity_data['availabilities'][$key] = array(
+                'id' => $value->getId(),
+                'date' => $value->getDate()->format('d-m-Y'),
+            );
+        }
+
+        $response = new JsonResponse($entity_data,JsonResponse::HTTP_OK,array('Content-Type' => 'application/json'));
 
         return $response;
 
