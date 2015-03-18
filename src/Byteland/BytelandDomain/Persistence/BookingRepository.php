@@ -2,7 +2,7 @@
 
 namespace Byteland\BytelandDomain\Persistence;
 
-use Byteland\BytelandDomain\Model;
+use Byteland\BytelandDomain\Model\Booking;
 
 interface BookingRepository
 {

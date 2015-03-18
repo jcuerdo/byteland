@@ -1,9 +1,13 @@
 services:
     person.repository:
         class: Byteland\BytelandDomain\Persistence\Doctrine\DoctrinePersonRepository
+        arguments: ['@doctrine.orm.entity_manager']
     restaurant.repository:
         class: Byteland\BytelandDomain\Persistence\Doctrine\DoctrineRestaurantRepository
+        arguments: ['@doctrine.orm.entity_manager']
     booking.repository:
         class: Byteland\BytelandDomain\Persistence\Doctrine\DoctrineBookingRepository
+        arguments: ['@doctrine.orm.entity_manager']
     availabiliti.repository:
         class: Byteland\BytelandDomain\Persistence\Doctrine\DoctrineAvailabilityRepository
+        arguments: ['@doctrine.orm.entity_manager']

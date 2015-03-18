@@ -2,7 +2,7 @@
 
 namespace Byteland\BytelandDomain\Persistence;
 
-use Byteland\BytelandDomain\Model;
+use Byteland\BytelandDomain\Model\Person;
 
 interface PersonRepository
 {
@@ -10,9 +10,9 @@ interface PersonRepository
 
     public function findAll();
 
-    public function add(User $user);
+    public function add(Person $person);
 
-    public function edit(User $user);
+    public function edit(Person $person);
 
     public function remove($userId);
 }
