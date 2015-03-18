@@ -56,6 +56,4 @@ class Availability {
     {
         return $this->restaurant;
     }
-
-
 }

@@ -2,10 +2,11 @@
 
 namespace Byteland\BytelandBundle\Controller;
 
+use Byteland\BytelandDomain\Model\Restaurant;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Byteland\BytelandBundle\Entity\Availability;
+use Byteland\BytelandDomain\Model\Availability;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -25,17 +26,12 @@ class AvailabilityController extends Controller
             return $response;
         }
 
-        $entity = new Availability();
+        $restaurant = new Restaurant($request->get('id_restaurant'), '');
+        $availability = new Availability(null, new \DateTime($request->get('date')),$restaurant);
 
-        $em = $this->getDoctrine()->getManager();
+        $availability_repository = $this->get('availability.repository');
 
-        $entity->setDate(new \DateTime($request->get('date')));
-        
-        $restaurant = $em->getRepository('BytelandBundle:Restaurant')->find($request->get('id_restaurant'));
-        $entity->setRestaurant($restaurant);
-
-        $em->persist($entity);
-        $em->flush();
+        $availability_repository->add($availability);
 
         $response = new JsonResponse('OK',JsonResponse::HTTP_CREATED ,array('Content-Type' => 'application/json'));
         

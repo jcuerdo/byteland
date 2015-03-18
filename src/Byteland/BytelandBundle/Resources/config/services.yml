@@ -8,6 +8,6 @@ services:
     booking.repository:
         class: Byteland\BytelandDomain\Persistence\Doctrine\DoctrineBookingRepository
         arguments: ['@doctrine.orm.entity_manager']
-    availabiliti.repository:
+    availability.repository:
         class: Byteland\BytelandDomain\Persistence\Doctrine\DoctrineAvailabilityRepository
         arguments: ['@doctrine.orm.entity_manager']

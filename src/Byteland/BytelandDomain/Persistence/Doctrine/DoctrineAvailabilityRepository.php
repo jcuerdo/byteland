@@ -11,5 +11,16 @@ class DoctrineAvailabilityRepository extends DoctrineGenericRepository implement
     {
         parent::__construct($em);
     }
-    public function add(Availability $availability){}
+    public function add(Availability $availability)
+    {
+        $doctrine_availability = new \Byteland\BytelandBundle\Entity\Availability();
+        $doctrine_availability->setDate($availability->getDate());
+
+        $doctrine_restaurant = $this->em->getRepository('BytelandBundle:Restaurant')->find($availability->getRestaurant()->getId());
+
+        $doctrine_availability->setRestaurant($doctrine_restaurant);
+
+        $this->em->persist($doctrine_availability);
+        $this->em->flush();
+    }
 }
