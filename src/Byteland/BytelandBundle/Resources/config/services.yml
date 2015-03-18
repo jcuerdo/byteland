@@ -1,4 +1,9 @@
 services:
-#    byteland.example:
-#        class: Byteland\BytelandBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    person.repository:
+        class: Byteland\BytelandDomain\Persistence\Doctrine\DoctrinePersonRepository
+    restaurant.repository:
+        class: Byteland\BytelandDomain\Persistence\Doctrine\DoctrineRestaurantRepository
+    booking.repository:
+        class: Byteland\BytelandDomain\Persistence\Doctrine\DoctrineBookingRepository
+    availabiliti.repository:
+        class: Byteland\BytelandDomain\Persistence\Doctrine\DoctrineAvailabilityRepository
