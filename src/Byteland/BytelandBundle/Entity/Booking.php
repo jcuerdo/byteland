@@ -31,14 +31,14 @@ class Booking
     /**
      * @var Person
      *
-     * @ORM\OneToOne(targetEntity="Person")
+     * @ORM\ManyToOne(targetEntity="Person",inversedBy="bookings")
      */
     private $person;
 
     /**
      * @var Restaurant
      *
-     * @ORM\OneToOne(targetEntity="Restaurant")
+     * @ORM\ManyToOne(targetEntity="Restaurant",inversedBy="bookings")
      */
     private $restaurant;
 

@@ -6,8 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Byteland\BytelandBundle\Entity\Availability;
-use Byteland\BytelandBundle\Form\AvailabilityType;
-use Symfony\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Availability controller.
@@ -22,7 +21,7 @@ class AvailabilityController extends Controller
     public function createAction(Request $request)
     {
         if(!$request->get('id_restaurant') || !$request->get('date')) {
-            $response = new JsonResponse('ERROR',JsonResponse::HTTP_PRECONDITION_REQUIRED ,array('Content-Type' => 'application/json'));
+            $response = new JsonResponse('ERROR',JsonResponse::HTTP_BAD_REQUEST ,array('Content-Type' => 'application/json'));
             return $response;
         }
 
@@ -30,7 +29,7 @@ class AvailabilityController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $entity->setDate(strtotime($request->get('date')));
+        $entity->setDate(new \DateTime($request->get('date')));
         
         $restaurant = $em->getRepository('BytelandBundle:Restaurant')->find($request->get('id_restaurant'));
         $entity->setRestaurant($restaurant);

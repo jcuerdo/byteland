@@ -12,4 +12,20 @@ use Doctrine\ORM\EntityRepository;
  */
 class AvailabilityRepository extends EntityRepository
 {
+    /**
+     * Find by date and restaurant
+     *
+     * @param Restaurant $restaurant
+     * @param \DateTime $date.
+     */
+    public function findByDate(Restaurant $restaurant, $date)
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT a from BytelandBundle:Availability a WHERE a.date=:a_date AND a.restaurant=:restaurant'
+            )
+            ->setParameter('a_date', $date)
+            ->setParameter('restaurant', $restaurant)
+            ->getArrayResult();
+    }
 }

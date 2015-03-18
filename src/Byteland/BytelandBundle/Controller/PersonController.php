@@ -39,7 +39,7 @@ class PersonController extends Controller
     public function createAction(Request $request)
     {
         if(!$request->get('name')) {
-            $response = new JsonResponse('ERROR',JsonResponse::HTTP_PRECONDITION_REQUIRED ,array('Content-Type' => 'application/json'));
+            $response = new JsonResponse('ERROR',JsonResponse::HTTP_BAD_REQUEST ,array('Content-Type' => 'application/json'));
             return $response;
         }
 
@@ -70,10 +70,18 @@ class PersonController extends Controller
             throw $this->createNotFoundException('Unable to find Person.');
         }
 
+        $entity_data = array('id' => $entity->getId(),'name' => $entity->getName());
 
-        $entity = array('id' => $entity->getId(),'name' => $entity->getName());
+        foreach($entity->getBookings() as $key => $value)
+        {
+            $entity_data['bookings'][$key] = array(
+                'id' => $value->getId(),
+                'date' => $value->getDate()->format('d-m-Y'),
+                'restaurant_id' => $value->getRestaurant()->getId()
+            );
+        }
 
-        $response = new JsonResponse($entity,JsonResponse::HTTP_OK,array('Content-Type' => 'application/json'));
+        $response = new JsonResponse($entity_data,JsonResponse::HTTP_OK,array('Content-Type' => 'application/json'));
 
         return $response;
 

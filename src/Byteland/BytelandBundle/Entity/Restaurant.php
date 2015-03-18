@@ -35,6 +35,46 @@ class Restaurant
      */
     private $maxAcceptedPeople;
 
+    /**
+     * @var array
+     *
+     * @ORM\OneToMany(targetEntity="Booking", mappedBy="restaurant")
+     */
+    private $bookings;
+
+    /**
+     * @var array
+     *
+     * @ORM\OneToMany(targetEntity="Booking", mappedBy="restaurant")
+     */
+    private $availabilities;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->bookings = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->availabilities = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getBookings()
+    {
+        return $this->bookings;
+    }
+
+    /**
+     * @param array $bookings
+     */
+    public function setBookings($bookings)
+    {
+        $this->bookings = $bookings;
+    }
+
 
     /**
      * Get id

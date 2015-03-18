@@ -3,6 +3,7 @@
 namespace Byteland\BytelandBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * BookingRepository
@@ -16,16 +17,16 @@ class BookingRepository extends EntityRepository
 	 * Find by date and restaurant
 	 *
 	 * @param Restaurant $restaurant
-	 * @param string $date.
+	 * @param \DateTime $date.
 	 */
-	public function findBookingByRestaurantAndDate(Restaurant $restaurant, $date)
+	public function findByDate(Restaurant $restaurant, $date)
 	{
     	return $this->getEntityManager()
     	->createQuery(
-    		'SELECT b from BytelandBundle:Booking b WHERE b.date=:date and b.restaurant_id=:restaurant'
+    		'SELECT b from BytelandBundle:Booking b WHERE b.date=:b_date AND b.restaurant=:restaurant'
     		)
-    	->setParameter('date', $date)
-    	->setParameter('restaurant', $restaurant->getId())
-    	->getSingleResult();
+    	->setParameter('b_date', $date)
+    	->setParameter('restaurant', $restaurant)
+    	->getArrayResult();
     }
 }

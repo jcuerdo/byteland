@@ -28,10 +28,10 @@ class Availability
      */
     private $date;
 
-        /**
+    /**
      * @var Restaurant
      *
-     * @ORM\OneToOne(targetEntity="Restaurant")
+     * @ORM\ManyToOne(targetEntity="Restaurant",inversedBy="availabilities")
      */
     private $restaurant;
 

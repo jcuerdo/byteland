@@ -6,8 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Byteland\BytelandBundle\Entity\Booking;
-use Byteland\BytelandBundle\Form\BookingType;
-use Symfony\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Booking controller.
@@ -22,7 +21,7 @@ class BookingController extends Controller
     public function createAction(Request $request)
     {
         if(!$request->get('id_restaurant') || !$request->get('id_person') || !$request->get('date')) {
-            $response = new JsonResponse('ERROR',JsonResponse::HTTP_PRECONDITION_REQUIRED ,array('Content-Type' => 'application/json'));
+            $response = new JsonResponse('ERROR',JsonResponse::HTTP_BAD_REQUEST ,array('Content-Type' => 'application/json'));
             return $response;
         }
 
@@ -30,14 +29,20 @@ class BookingController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $entity->setDate(strtotime($request->get('date')));
+        $entity->setDate(new \DateTime($request->get('date')));
         
         $restaurant = $em->getRepository('BytelandBundle:Restaurant')->find($request->get('id_restaurant'));
 
-        $bookings = $entity->findBookingByRestaurantAndDate($restaurnat,$request->get('date'));
+        $bookings =  $em->getRepository('BytelandBundle:Booking')->findByDate($restaurant, new \DateTime($request->get('date')));
 
-        if(count($bookings) >= $restaurnat->getMaxAcceptedPeople())) {
+        $availability =  $em->getRepository('BytelandBundle:Availability')->findByDate($restaurant, new \DateTime($request->get('date')));
+
+        if(count($bookings) >= $restaurant->getMaxAcceptedPeople()) {
             $response = new JsonResponse('RESTAURANT FULL',JsonResponse::HTTP_PRECONDITION_REQUIRED ,array('Content-Type' => 'application/json'));
+            return $response;
+        }
+        if(count($availability) == 0){
+            $response = new JsonResponse('RESTAURANT NOT AVAILABLE',JsonResponse::HTTP_PRECONDITION_REQUIRED ,array('Content-Type' => 'application/json'));
             return $response;
         }
 

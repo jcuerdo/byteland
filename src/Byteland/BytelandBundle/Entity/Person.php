@@ -28,6 +28,36 @@ class Person
      */
     private $name;
 
+    /**
+     * @var array
+     *
+     * @ORM\OneToMany(targetEntity="Booking", mappedBy="person")
+     */
+    private $bookings;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->bookings = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * @return array
+     */
+    public function getBookings()
+    {
+        return $this->bookings;
+    }
+
+    /**
+     * @param array $bookings
+     */
+    public function setBookings($bookings)
+    {
+        $this->bookings = $bookings;
+    }
 
     /**
      * Get id
