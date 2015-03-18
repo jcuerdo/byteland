@@ -7,8 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Byteland\BytelandBundle\Entity\Restaurant;
-use Byteland\BytelandBundle\Form\RestaurantType;
+use Byteland\BytelandDomain\Model\Restaurant;
 
 /**
  * Restaurant controller.
@@ -16,23 +15,25 @@ use Byteland\BytelandBundle\Form\RestaurantType;
  */
 class RestaurantController extends Controller
 {
-
     /**
      * Lists all Restaurant entities.
      *
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $restaurant_repository = $this->get('restaurant.repository');
 
-        $entities = $em->getRepository('BytelandBundle:Restaurant')->findAll();
+        $restaurants = $restaurant_repository->findAll();
 
-        foreach($entities as $key => $entity)
+        foreach($restaurants as $key => $restaurant)
         {
-            $entities[$key] = array('id' => $entity->getId(),'name' => $entity->getName(),'max_accepted_people' => $entity->getMaxAcceptedPeople());
+            $restaurants[$key] = array(
+                'id' => $restaurant->getId(),
+                'name' => $restaurant->getName(),
+                'max_accepted_persons' => $restaurant->getMaxAcceptedPeople()
+            );
         }
-        $response = new JsonResponse($entities,JsonResponse::HTTP_OK,array('Content-Type' => 'application/json'));
-
+        $response = new JsonResponse($restaurants,JsonResponse::HTTP_OK,array('Content-Type' => 'application/json'));
         return $response;
     }
     /**
@@ -46,14 +47,11 @@ class RestaurantController extends Controller
             return $response;
         }
 
-        $entity = new Restaurant();
+        $restaurant = new Restaurant(null, $request->get('name'),$request->get('max_accepted_people'));
 
-        $entity->setName($request->get('name'));
-        $entity->setMaxAcceptedPeople($request->get('max_accepted_people'));
+        $restaurant_repository = $this->get('restaurant.repository');
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($entity);
-        $em->flush();
+        $restaurant_repository->add($restaurant);
 
         $response = new JsonResponse('OK',JsonResponse::HTTP_CREATED ,array('Content-Type' => 'application/json'));
         return $response;
@@ -65,34 +63,30 @@ class RestaurantController extends Controller
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $restaurant_repository = $this->get('restaurant.repository');
 
-        $entity = $em->getRepository('BytelandBundle:Restaurant')->find($id);
+        $restaurant = $restaurant_repository->find($id);
 
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Restaurant.');
-        }
+        $restaurant_data = array('id' => $restaurant->getId(),'name' => $restaurant->getName());
 
-        $entity_data = array('id' => $entity->getId(),'name' => $entity->getName(),'max_accepted_people' => $entity->getMaxAcceptedPeople());
-
-        foreach($entity->getBookings() as $key => $value)
+        foreach($restaurant->getBookings() as $key => $booking)
         {
-            $entity_data['bookings'][$key] = array(
-                'id' => $value->getId(),
-                'date' => $value->getDate()->format('d-m-Y'),
-                'person_id' => $value->getPerson()->getId()
+            $restaurant_data['bookings'][$key] = array(
+                'id' => $booking->getId(),
+                'date' => $booking->getDate()->format('d-m-Y'),
+                'person_id' => $booking->getPerson()->getId()
             );
         }
 
-        foreach($entity->getAvailabilities() as $key => $value)
+        foreach($restaurant->getAvailabilities() as $key => $availability)
         {
-            $entity_data['availabilities'][$key] = array(
-                'id' => $value->getId(),
-                'date' => $value->getDate()->format('d-m-Y'),
+            $restaurant_data['availabilities'][$key] = array(
+                'id' => $availability->getId(),
+                'date' => $availability->getDate()->format('d-m-Y'),
             );
         }
 
-        $response = new JsonResponse($entity_data,JsonResponse::HTTP_OK,array('Content-Type' => 'application/json'));
+        $response = new JsonResponse($restaurant_data,JsonResponse::HTTP_OK,array('Content-Type' => 'application/json'));
 
         return $response;
 
@@ -106,28 +100,9 @@ class RestaurantController extends Controller
     {
         parse_str($request->getContent(), $params);
 
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('BytelandBundle:Restaurant')->find($id);
-
-        if(!empty($params['name']))
-        {
-            $entity->setName($params['name']);
-        }
-
-        if(!empty($params['max_accepted_people']))
-        {
-            $entity->setMaxAcceptedPeople($params['max_accepted_people']);
-        }
-
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Restaurant.');
-        }
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($entity);
-        $em->flush();
+        $restaurant = new Restaurant($id, $params['name'], $params['max_accepted_people']);
+        $restaurant_repository = $this->get('restaurant.repository');
+        $restaurant_repository->edit($restaurant);
 
         $response = new JsonResponse('OK',JsonResponse::HTTP_OK,array('Content-Type' => 'application/json'));
 
@@ -140,37 +115,11 @@ class RestaurantController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
+        $restaurant_repository = $this->get('restaurant.repository');
+        $restaurant_repository->remove($id);
 
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('BytelandBundle:Restaurant')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Restaurant entity.');
-        }
-
-        $em->remove($entity);
-        $em->flush();
         $response = new JsonResponse('OK',JsonResponse::HTTP_OK,array('Content-Type' => 'application/json'));
 
         return $response;
-    }
-
-    /**
-     * Creates a form to delete a Restaurant entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('restaurant_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
     }
 }

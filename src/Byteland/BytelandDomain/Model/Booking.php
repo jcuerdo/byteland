@@ -3,8 +3,6 @@
 namespace Byteland\BytelandDomain\Model;
 
 
-use Byteland\BytelandBundle\Entity\Restaurant;
-
 class Booking {
 
     /**
@@ -34,7 +32,7 @@ class Booking {
     /**
      * Constructor
      */
-    public function __construct($id, $date, Restaurant $restaurant, Person $person)
+    public function __construct($id, $date, Restaurant $restaurant, Person $person = null)
     {
         $this->id = $id;
         $this->date = $date;

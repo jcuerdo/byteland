@@ -6,8 +6,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Byteland\BytelandBundle\Entity\Person;
-use Byteland\BytelandBundle\Form\PersonType;
+use Byteland\BytelandDomain\Model\Person;
 
 /**
  * Person controller.
@@ -15,21 +14,21 @@ use Byteland\BytelandBundle\Form\PersonType;
  */
 class PersonController extends Controller
 {
-
     /**
      * Lists all Person entities.
      *
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $person_repository = $this->get('person.repository');
 
-        $entities = $em->getRepository('BytelandBundle:Person')->findAll();
-        foreach($entities as $key => $value)
+        $persons = $person_repository->findAll();
+
+        foreach($persons as $key => $value)
         {
-            $entities[$key] = array('id' => $value->getId(),'name' => $value->getName());
+            $persons[$key] = array('id' => $value->getId(),'name' => $value->getName());
         }
-        $response = new JsonResponse($entities,JsonResponse::HTTP_OK,array('Content-Type' => 'application/json'));
+        $response = new JsonResponse($persons,JsonResponse::HTTP_OK,array('Content-Type' => 'application/json'));
         return $response;
     }
     /**
@@ -43,13 +42,9 @@ class PersonController extends Controller
             return $response;
         }
 
-        $entity = new Person();
-
-        $entity->setName($request->get('name'));
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($entity);
-        $em->flush();
+        $person = new Person(null, $request->get('name'));
+        $person_repository = $this->get('person.repository');
+        $person_repository->add($person);
 
         $response = new JsonResponse('OK',JsonResponse::HTTP_CREATED ,array('Content-Type' => 'application/json'));
         return $response;
@@ -61,27 +56,22 @@ class PersonController extends Controller
      */
     public function showAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
+        $person_repository = $this->get('person.repository');
 
-        $entity = $em->getRepository('BytelandBundle:Person')->find($id);
+        $person = $person_repository->find($id);
 
+        $person_data = array('id' => $person->getId(),'name' => $person->getName());
 
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Person.');
-        }
-
-        $entity_data = array('id' => $entity->getId(),'name' => $entity->getName());
-
-        foreach($entity->getBookings() as $key => $value)
+        foreach($person->getBookings() as $key => $value)
         {
-            $entity_data['bookings'][$key] = array(
+            $person_data['bookings'][$key] = array(
                 'id' => $value->getId(),
                 'date' => $value->getDate()->format('d-m-Y'),
                 'restaurant_id' => $value->getRestaurant()->getId()
             );
         }
 
-        $response = new JsonResponse($entity_data,JsonResponse::HTTP_OK,array('Content-Type' => 'application/json'));
+        $response = new JsonResponse($person_data,JsonResponse::HTTP_OK,array('Content-Type' => 'application/json'));
 
         return $response;
 
@@ -95,18 +85,11 @@ class PersonController extends Controller
     {
         parse_str($request->getContent(), $params);
 
-        $em = $this->getDoctrine()->getManager();
+        $person = new Person($id,$request->get('name'));
 
-        $entity = $em->getRepository('BytelandBundle:Person')->find($id);
+        $person_repository = $this->get('person.repository');
 
-        if(!empty($params['name']))
-        {
-            $entity->setName($params['name']);
-        }
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($entity);
-        $em->flush();
+        $person_repository->edit($person);
 
         $response = new JsonResponse('OK',JsonResponse::HTTP_OK,array('Content-Type' => 'application/json'));
 

@@ -3,7 +3,7 @@
 namespace Byteland\BytelandDomain\Model;
 
 
-class Person {
+class Restaurant {
 
     /**
      * @var integer
@@ -38,7 +38,7 @@ class Person {
     /**
      * Constructor
      */
-    public function __construct($id, $name, $maxAcceptedPeople, $bookings = array(), $availabilities = array())
+    public function __construct($id, $name, $maxAcceptedPeople = 0, $bookings = array(), $availabilities = array())
     {
         $this->id = $id;
         $this->name = $name;

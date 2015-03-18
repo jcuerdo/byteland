@@ -45,7 +45,7 @@ class Restaurant
     /**
      * @var array
      *
-     * @ORM\OneToMany(targetEntity="Booking", mappedBy="restaurant")
+     * @ORM\OneToMany(targetEntity="Availability", mappedBy="restaurant")
      */
     private $availabilities;
 
