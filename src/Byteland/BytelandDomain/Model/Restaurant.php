@@ -87,6 +87,21 @@ class Restaurant {
         return $this->availabilities;
     }
 
+    /**
+     * @param DateTime $date
+     *
+     * @return bool
+     */
+    public function isAvailable(\DateTime $date)
+    {
+        foreach($this->availabilities as $availability) {
+            if($availability->getDate() == $date) {
+                return count($this->bookings) < $this->maxAcceptedPeople;
+            }
+        }
+        return false;
+    }
+
 
 
 }

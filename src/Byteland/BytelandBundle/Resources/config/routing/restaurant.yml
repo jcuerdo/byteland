@@ -10,7 +10,7 @@ restaurant_show:
 
 
 restaurant_create:
-    path:     /create
+    path:     /
     defaults: { _controller: "BytelandBundle:Restaurant:create" }
     methods: [POST]
 

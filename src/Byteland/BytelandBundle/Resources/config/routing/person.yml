@@ -4,7 +4,7 @@ person:
     methods: [GET]
 
 person_create:
-    path:     /create
+    path:     /
     defaults: { _controller: "BytelandBundle:Person:create" }
     methods: [POST]
 

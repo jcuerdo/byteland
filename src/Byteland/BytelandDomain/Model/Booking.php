@@ -32,7 +32,7 @@ class Booking {
     /**
      * Constructor
      */
-    public function __construct($id, $date, Restaurant $restaurant, Person $person = null)
+    public function __construct($id, $date, Restaurant $restaurant = null, Person $person = null)
     {
         $this->id = $id;
         $this->date = $date;
