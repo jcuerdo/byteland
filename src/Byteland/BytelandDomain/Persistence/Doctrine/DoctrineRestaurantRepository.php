@@ -6,9 +6,10 @@ use Byteland\BytelandDomain\Model\Availability;
 use Byteland\BytelandDomain\Model\Restaurant;
 use Byteland\BytelandDomain\Model\Person;
 use Byteland\BytelandDomain\Model\Booking;
+use Byteland\BytelandDomain\Persistence\FindableRepository;
 use Byteland\BytelandDomain\Persistence\RestaurantRepository;
 
-class DoctrineRestaurantRepository extends DoctrineGenericRepository implements RestaurantRepository
+class DoctrineRestaurantRepository extends DoctrineGenericRepository implements RestaurantRepository, FindableRepository
 {
     public function __construct($em)
     {

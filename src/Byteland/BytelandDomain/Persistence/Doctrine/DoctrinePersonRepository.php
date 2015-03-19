@@ -5,9 +5,10 @@ namespace Byteland\BytelandDomain\Persistence\Doctrine;
 use Byteland\BytelandDomain\Model\Restaurant;
 use Byteland\BytelandDomain\Model\Booking;
 use Byteland\BytelandDomain\Model\Person;
+use Byteland\BytelandDomain\Persistence\FindableRepository;
 use Byteland\BytelandDomain\Persistence\PersonRepository;
 
-class DoctrinePersonRepository extends DoctrineGenericRepository implements PersonRepository
+class DoctrinePersonRepository extends DoctrineGenericRepository implements PersonRepository, FindableRepository
 {
     public function __construct($em)
     {
