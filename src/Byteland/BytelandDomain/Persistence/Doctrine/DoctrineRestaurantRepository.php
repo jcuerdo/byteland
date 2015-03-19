@@ -20,29 +20,9 @@ class DoctrineRestaurantRepository extends DoctrineGenericRepository implements 
         $availabilities = array();
         $doctrine_restaurant = $this->em->getRepository('BytelandBundle:Restaurant')->find($restaurantId);
 
-        foreach($doctrine_restaurant->getBookings() as $doctrine_booking)
-        {
-            $bookings[] = new Booking(
-                $doctrine_booking->getId(),
-                $doctrine_booking->getDate(),
-                new Restaurant(
-                    $doctrine_booking->getRestaurant()->getId(),
-                    $doctrine_booking->getRestaurant()->getName()
-                ),
-                new Person(
-                    $doctrine_booking->getPerson()->getId(),
-                    $doctrine_booking->getPerson()->getName()
-                )
-            );
-        }
+        $bookings = $this->loadDoctrineBookings($doctrine_restaurant, $bookings);
 
-        foreach($doctrine_restaurant->getAvailabilities() as $doctrine_availability)
-        {
-            $availabilities[] = new Availability(
-                $doctrine_availability->getId(),
-                $doctrine_availability->getDate()
-            );
-        }
+        $availabilities = $this->loadDoctrineAvailabilities($doctrine_restaurant, $availabilities);
 
         $restaurant = new Restaurant(
             $doctrine_restaurant->getId(),
@@ -58,14 +38,7 @@ class DoctrineRestaurantRepository extends DoctrineGenericRepository implements 
     {
         $doctrine_restaurants = $this->em->getRepository('BytelandBundle:Restaurant')->findAll();
         $restaurants = array();
-        foreach($doctrine_restaurants as $doctrine_restaurant)
-        {
-            $restaurants[] = new Restaurant(
-                $doctrine_restaurant->getId(),
-                $doctrine_restaurant->getName(),
-                $doctrine_restaurant->getMaxAcceptedPeople()
-            ) ;
-        }
+        $restaurants = $this->loadDoctrineRestaurants($doctrine_restaurants, $restaurants);
         return $restaurants;
     }
 
@@ -106,5 +79,62 @@ class DoctrineRestaurantRepository extends DoctrineGenericRepository implements 
 
         $this->em->remove($doctrine_restaurant);
         $this->em->flush();
+    }
+
+    /**
+     * @param $doctrine_restaurant
+     * @param $bookings
+     * @return array
+     */
+    private function loadDoctrineBookings($doctrine_restaurant, $bookings)
+    {
+        foreach ($doctrine_restaurant->getBookings() as $doctrine_booking) {
+            $bookings[] = new Booking(
+                $doctrine_booking->getId(),
+                $doctrine_booking->getDate(),
+                new Restaurant(
+                    $doctrine_booking->getRestaurant()->getId(),
+                    $doctrine_booking->getRestaurant()->getName()
+                ),
+                new Person(
+                    $doctrine_booking->getPerson()->getId(),
+                    $doctrine_booking->getPerson()->getName()
+                )
+            );
+        }
+        return $bookings;
+    }
+
+    /**
+     * @param $doctrine_restaurant
+     * @param $availabilities
+     * @return array
+     */
+    private function loadDoctrineAvailabilities($doctrine_restaurant, $availabilities)
+    {
+        foreach ($doctrine_restaurant->getAvailabilities() as $doctrine_availability) {
+            $availabilities[] = new Availability(
+                $doctrine_availability->getId(),
+                $doctrine_availability->getDate()
+            );
+        }
+        return $availabilities;
+    }
+
+    /**
+     * @param $doctrine_restaurants
+     * @param $restaurants
+     * @return array
+     */
+    private function loadDoctrineRestaurants($doctrine_restaurants, $restaurants)
+    {
+        foreach ($doctrine_restaurants as $doctrine_restaurant) {
+            $restaurants[] = new Restaurant(
+                $doctrine_restaurant->getId(),
+                $doctrine_restaurant->getName(),
+                $doctrine_restaurant->getMaxAcceptedPeople()
+            );
+        }
+        return $restaurants;
     }
 }

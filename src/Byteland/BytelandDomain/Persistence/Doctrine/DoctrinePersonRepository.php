@@ -18,18 +18,7 @@ class DoctrinePersonRepository extends DoctrineGenericRepository implements Pers
         $bookings = array();
         $doctrine_person = $this->em->getRepository('BytelandBundle:Person')->find($userId);
 
-        foreach($doctrine_person->getBookings() as $doctrine_booking)
-        {
-            $bookings[] = new Booking(
-                $doctrine_booking->getId(),
-                $doctrine_booking->getDate(),
-                new Restaurant(
-                    $doctrine_booking->getRestaurant()->getId(),
-                    $doctrine_booking->getRestaurant()->getName()
-                ),
-                null
-            );
-        }
+        $bookings = $this->loadDoctrineBookings($doctrine_person, $bookings);
 
         $person = new Person($doctrine_person->getId(),$doctrine_person->getName(),$bookings) ;
 
@@ -87,5 +76,26 @@ class DoctrinePersonRepository extends DoctrineGenericRepository implements Pers
 
         $this->em->remove($doctrine_person);
         $this->em->flush();
+    }
+
+    /**
+     * @param $doctrine_person
+     * @param $bookings
+     * @return array
+     */
+    private function loadDoctrineBookings($doctrine_person, $bookings)
+    {
+        foreach ($doctrine_person->getBookings() as $doctrine_booking) {
+            $bookings[] = new Booking(
+                $doctrine_booking->getId(),
+                $doctrine_booking->getDate(),
+                new Restaurant(
+                    $doctrine_booking->getRestaurant()->getId(),
+                    $doctrine_booking->getRestaurant()->getName()
+                ),
+                null
+            );
+        }
+        return $bookings;
     }
 }
