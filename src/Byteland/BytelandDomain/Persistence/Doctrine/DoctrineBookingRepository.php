@@ -5,7 +5,6 @@ namespace Byteland\BytelandDomain\Persistence\Doctrine;
 use Byteland\BytelandBundle\Entity\RestaurantRepository;
 use Byteland\BytelandDomain\Model\Booking;
 use Byteland\BytelandDomain\Persistence\BookingRepository;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 class DoctrineBookingRepository extends DoctrineGenericRepository implements BookingRepository
 {
