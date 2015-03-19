@@ -11,22 +11,32 @@ API Methods
 ========================
 
 GET http://192.168.100.101/byteland/web/person
+
 GET http://192.168.100.101/byteland/web/person/{id}
+
 POST http://192.168.100.101/byteland/web/person
+
 PUT http://192.168.100.101/byteland/web/person/{id}
+
 DELETE http://192.168.100.101/byteland/web/person/{id}
 
+
 GET http://192.168.100.101/byteland/web/restaurant
+
 GET http://192.168.100.101/byteland/web/restaurant/{id}
+
 POST http://192.168.100.101/byteland/web/restaurant
+
 PUT http://192.168.100.101/byteland/web/restaurant/{id}
+
 DELETE http://192.168.100.101/byteland/web/restaurant/{id}
 
 POST http://192.168.100.101/byteland/web/booking
+
 POST http://192.168.100.101/byteland/web/availability
 
 TODOs
 =====================
 Some tests (models from domain and symfony controllers)
-All tests (domain persistence)
 
+All tests (domain persistence)
