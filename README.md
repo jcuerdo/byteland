@@ -40,3 +40,7 @@ TODOs
 Some tests (models from domain and symfony controllers)
 
 All tests (domain persistence)
+
+Development Environment (Recomended)
+=====================
+https://bitbucket.org/jocual/vagrant-ansible
