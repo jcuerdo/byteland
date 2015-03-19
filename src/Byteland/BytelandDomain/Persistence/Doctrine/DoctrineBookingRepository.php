@@ -2,7 +2,6 @@
 
 namespace Byteland\BytelandDomain\Persistence\Doctrine;
 
-use Byteland\BytelandBundle\Entity\RestaurantRepository;
 use Byteland\BytelandDomain\Model\Booking;
 use Byteland\BytelandDomain\Persistence\BookingRepository;
 
@@ -14,10 +13,10 @@ class DoctrineBookingRepository extends DoctrineGenericRepository implements Boo
     }
     public function add(Booking $booking)
     {
-        $restaurant_repository = new RestaurantRepository($this->em);
+        $restaurant_repository = new DoctrineRestaurantRepository($this->em);
         $restaurant = $restaurant_repository->find($booking->getRestaurant()->getId());
 
-        if(!$restaurant->isAvailable()){
+        if(!$restaurant->isAvailable($booking->getDate())){
             throw new \Exception("Restaurant not Available");
         }
 
